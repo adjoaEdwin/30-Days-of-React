@@ -1,46 +1,48 @@
-import React, { Component} from 'react';
-import CardList from './CardList';
-import SearchBox from './SearchBox';
-import Scroll from './Scroll';
+import React, { Component } from "react";
+import CardList from "./CardList";
+import SearchBox from "./SearchBox";
+import Scroll from "./Scroll";
 
 class App extends Component {
-    constructor() {
-        super() 
-        this.state = {
-            robots : [],
-            searchfield : ''
-        }
-    }
+  constructor() {
+    super();
+    this.state = {
+      robots: [],
+      searchfield: "",
+    };
+  }
 
-    componentDidMount () {
-        fetch('https://jsonplaceholder.typicode.com/users')
-            .then(response => response.json())
-            .then(users => {this.setState({ robots: users })});    
-    }
+  componentDidMount() {
+    fetch("https://jsonplaceholder.typicode.com/users")
+      .then((response) => response.json())
+      .then((users) => {
+        this.setState({ robots: users });
+      });
+  }
 
-    onSearchChange = (event) => {
-        this.setState({ searchfield: event.target.value });
-    }
+  onSearchChange = (event) => {
+    this.setState({ searchfield: event.target.value });
+  };
 
-    render() {
-        const filteredRobots = this.state.robots.filter(robots=> {
-            return robots.name.toLowerCase().includes(this.state.searchfield.toLowerCase())
-        })
-        if (this.state.robots.length === 0) {
-            return <h1>Loading ...</h1>
-        }else {
-            return (
-                <div className='tc'>
-                    <h2>RoboFriends</h2>
-                    <SearchBox searchChange={this.onSearchChange}/>
-                    <Scroll>
-                        <CardList robots={ filteredRobots }/>
-                    </Scroll>
-              </div>
-            )  
-        }
-        
+  render() {
+    const { robots, searchfield } = this.state;
+    const filteredRobots = robots.filter((robot) =>
+      robot.name.toLowerCase().includes(searchfield.toLowerCase())
+    );
+    if (!robots.length) {
+      return <h1>Loading ...</h1>;
+    } else {
+      return (
+        <div className="tc">
+          <h2>RoboFriends</h2>
+          <SearchBox searchChange={this.onSearchChange} />
+          <Scroll>
+            <CardList robots={filteredRobots} />
+          </Scroll>
+        </div>
+      );
     }
+  }
 }
 
 export default App;
